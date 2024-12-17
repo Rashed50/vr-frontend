@@ -1,0 +1,9 @@
+src/
+├── components/
+│   ├── layouts/
+│   │   ├── Footer.vue
+│   │   ├── Navbar.vue
+│   │   ├── Sidebar.vue
+│   │   ├── ThemeSettings.vue
+├── MasterLayout.vue
+├── main.js
