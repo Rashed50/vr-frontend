@@ -12,30 +12,30 @@
                     </div>
                 </div>
 
-                <form @submit.prevent="submitForm">
+                <form @submit.prevent="submitForm" ref="signupForm">
                     <div class="row">
                         <div class="col-md-6 mb-1">
                             <label class="form-label">First Name</label>
                             <input type="text" v-model="form.first_name" class="form-control ps-1"
-                                placeholder="First Name" required/>
+                                placeholder="First Name" required />
                         </div>
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Last Name</label>
                             <input type="text" v-model="form.last_name" class="form-control ps-1"
-                                placeholder="Last Name" required/>
+                                placeholder="Last Name" required />
                         </div>
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Email address</label>
                             <input type="email" v-model="form.email" class="form-control ps-1"
-                                placeholder="Email Address" required/>
+                                placeholder="Email Address" required />
                         </div>
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Username</label>
                             <input type="username" v-model="form.username" class="form-control ps-1"
-                                placeholder="Username" required/>
+                                placeholder="Username" required />
                         </div>
 
 
@@ -69,7 +69,7 @@
                             <label class="form-label">Password</label>
                             <div class="password-container">
                                 <input v-model="form.password" :type="passwordFieldType" class="form-control ps-1"
-                                    placeholder="Password" required/>
+                                    placeholder="Password" required />
                                 <i :class="eyeIconClass" class="eye-icon" @click="togglePassword"></i>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                             <label class="form-label">Confirm Password</label>
                             <div class="password-container">
                                 <input v-model="form.c_password" :type="confirmPasswordFieldType"
-                                    class="form-control ps-1" placeholder="Confirm Password" required/>
+                                    class="form-control ps-1" placeholder="Confirm Password" required />
                                 <i :class="eyeIconClass" class="eye-icon" @click="toggleConfirmPassword"></i>
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="col-md-6">
                             <div class="form-check">
                                 <input v-model="form.rememberMe" class="form-check-input" type="checkbox" value=""
-                                    id="form2Example31" required/>
+                                    id="form2Example31" />
                                 <label class="form-check-label" for="form2Example31"> Remember me </label>
                             </div>
                         </div>
@@ -183,7 +183,23 @@ export default {
                 const response = await axios.post(`${baseURL}/auth/signup/`, this.form, { headers });
 
                 if (response.data.success) {
+
+                    // Clear form inputs using reset
+                    this.$refs.signupForm.reset(); // This clears input fields
+
+                    // Reset form data manually to ensure Vue model is cleared
+                    this.form = {
+                        first_name: '',
+                        last_name: '',
+                        email: '',
+                        username: '',
+                        password: '',
+                        c_password: '',
+                        rememberMe: false
+                    };
+
                     this.messages = [{ type: 'alert-success', text: 'Registration successful!' }];
+
                     // You can redirect to login page after successful registration, e.g.:
                     // this.$router.push('/login');
                 } else {
