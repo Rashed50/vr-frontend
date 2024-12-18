@@ -1,9 +1,29 @@
-src/
-├── components/
+Frontend_Dashboard
+├── .vscode
+├── node_modules
+├── public
+├── src/
+│   ├── components/
 │   ├── layouts/
-│   │   ├── Footer.vue
-│   │   ├── Navbar.vue
-│   │   ├── Sidebar.vue
-│   │   ├── ThemeSettings.vue
-├── MasterLayout.vue
-├── main.js
+│   │   ├── AdminFooter.vue
+│   │   ├── AdminNavbar.vue
+│   │   ├── AdminSidebar.vue
+│   │   ├── AdminThemSettings.vue
+│   ├── router/
+│   │   │   ├── routes.js
+│   ├── utils/
+│   │   │   ├── routes.js
+│   ├── views/
+│   │   ├── pages/
+│   │   │   ├── My all pages
+├── ├── App.vue
+├── ├── main.js
+│
+├── .env
+├── .gitignore
+├── index.html
+├── package.json
+├── README.md
+├── vite.config.js
+├── yarn.lock
+

@@ -16,23 +16,30 @@
                     <div class="row">
                         <div class="col-md-6 mb-1">
                             <label class="form-label">First Name</label>
-                            <input type="text" v-model="form.f_name" class="form-control ps-1"
-                                placeholder="First Name" />
+                            <input type="text" v-model="form.first_name" class="form-control ps-1"
+                                placeholder="First Name" required/>
                         </div>
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Last Name</label>
-                            <input type="text" v-model="form.l_name" class="form-control ps-1"
-                                placeholder="Last Name" />
+                            <input type="text" v-model="form.last_name" class="form-control ps-1"
+                                placeholder="Last Name" required/>
                         </div>
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Email address</label>
                             <input type="email" v-model="form.email" class="form-control ps-1"
-                                placeholder="Email Address" />
+                                placeholder="Email Address" required/>
                         </div>
 
                         <div class="col-md-6 mb-1">
+                            <label class="form-label">Username</label>
+                            <input type="username" v-model="form.username" class="form-control ps-1"
+                                placeholder="Username" required/>
+                        </div>
+
+
+                        <!-- <div class="col-md-6 mb-1">
                             <label class="form-label">Contact Number</label>
                             <input type="text" v-model="form.phone" class="form-control ps-1"
                                 placeholder="Contact Number" minlength="11" maxlength="13" pattern="^\d{11,13}$"
@@ -43,7 +50,7 @@
                             <label class="form-label">Country Name</label>
                             <select v-model="form.selectedCountry" class="form-control ps-1">
                                 <option v-for="country in countries" :value="country.id" :key="country.id">
-                                    [[ country.name ]]
+                                    {{country.name}}
                                 </option>
                             </select>
                         </div>
@@ -56,13 +63,13 @@
                         <div class="col-md-12 mb-1">
                             <label class="form-label">Address</label>
                             <textarea v-model="form.address" class="form-control ps-1" rows="2" cols="10"></textarea>
-                        </div>
+                        </div> -->
 
                         <div class="col-md-6 mb-1">
                             <label class="form-label">Password</label>
                             <div class="password-container">
                                 <input v-model="form.password" :type="passwordFieldType" class="form-control ps-1"
-                                    placeholder="Password" />
+                                    placeholder="Password" required/>
                                 <i :class="eyeIconClass" class="eye-icon" @click="togglePassword"></i>
                             </div>
                         </div>
@@ -71,7 +78,7 @@
                             <label class="form-label">Confirm Password</label>
                             <div class="password-container">
                                 <input v-model="form.c_password" :type="confirmPasswordFieldType"
-                                    class="form-control ps-1" placeholder="Confirm Password" />
+                                    class="form-control ps-1" placeholder="Confirm Password" required/>
                                 <i :class="eyeIconClass" class="eye-icon" @click="toggleConfirmPassword"></i>
                             </div>
                         </div>
@@ -81,7 +88,7 @@
                         <div class="col-md-6">
                             <div class="form-check">
                                 <input v-model="form.rememberMe" class="form-check-input" type="checkbox" value=""
-                                    id="form2Example31" />
+                                    id="form2Example31" required/>
                                 <label class="form-check-label" for="form2Example31"> Remember me </label>
                             </div>
                         </div>
@@ -107,52 +114,96 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 export default {
     data() {
         return {
             form: {
-                f_name: '',
-                l_name: '',
+                first_name: '',
+                last_name: '',
                 email: '',
-                phone: '',
-                city: '',
-                address: '',
+                username: '',
+                // phone: '',
+                // city: '',
+                // address: '',
                 password: '',
                 c_password: '',
-                selectedCountry: null,
+                // selectedCountry: null,
                 rememberMe: false
             },
-            countries: [],
+            // countries: [],
             passwordFieldType: 'password',
             confirmPasswordFieldType: 'password',
             eyeIconClass: 'fas fa-eye',
-            messages: []  // You can manage success/error messages here
+            messages: []   // Success/Error messages
         };
     },
     mounted() {
-        this.fetchCountries();
+        // this.fetchCountries();
     },
     methods: {
-        async fetchCountries() {
-            try {
-                const response = await fetch('/api/countries/');
-                const data = await response.json();
-                this.countries = data;
-            } catch (error) {
-                console.error('Error fetching countries:', error);
-            }
-        },
+        // async fetchCountries() {
+        //     try {
+        //         const response = await fetch('/api/countries/');
+        //         const data = await response.json();
+        //         this.countries = data;
+        //     } catch (error) {
+        //         console.error('Error fetching countries:', error);
+        //     }
+        // },
+
         togglePassword() {
             this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password';
             this.eyeIconClass = this.passwordFieldType === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
         },
+
         toggleConfirmPassword() {
             this.confirmPasswordFieldType = this.confirmPasswordFieldType === 'password' ? 'text' : 'password';
         },
-        submitForm() {
-            // Handle form submission logic here
+
+        // Submit form method
+        async submitForm() {
             console.log('Form submitted:', this.form);
+
+            // Validate password match
+            if (this.form.password !== this.form.c_password) {
+                this.messages = [{ type: 'alert-danger', text: 'Passwords do not match!' }];
+                return;
+            }
+
+            const baseURL = import.meta.env.VITE_BASE_URL;
+
+            try {
+                const headers = {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${token}`
+                };
+
+                const response = await axios.post(`${baseURL}/signup/`, this.form, { headers });
+
+                if (response.data.success) {
+                    this.messages = [{ type: 'alert-success', text: 'Registration successful!' }];
+                    // You can redirect to login page after successful registration, e.g.:
+                    // this.$router.push('/login');
+                } else {
+                    this.messages = [{ type: 'alert-danger', text: response.data.message }];
+                }
+            } catch (error) {
+                console.error('Error submitting the form:', error);
+
+                if (error.response && error.response.data) {
+                    const errorMessages = error.response.data;
+                    this.messages = [];
+                    for (const [field, messages] of Object.entries(errorMessages)) {
+                        messages.forEach(msg => {
+                            this.messages.push({ type: 'alert-danger', text: `${field}: ${msg}` });
+                        });
+                    }
+                } else {
+                    this.messages = [{ type: 'alert-danger', text: 'Something went wrong! Please try again later.' }];
+                }
+            }
         }
     }
 };
