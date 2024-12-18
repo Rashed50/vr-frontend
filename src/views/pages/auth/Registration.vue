@@ -180,7 +180,7 @@ export default {
                     // 'Authorization': `Bearer ${token}`
                 };
 
-                const response = await axios.post(`${baseURL}/signup/`, this.form, { headers });
+                const response = await axios.post(`${baseURL}/auth/signup/`, this.form, { headers });
 
                 if (response.data.success) {
                     this.messages = [{ type: 'alert-success', text: 'Registration successful!' }];

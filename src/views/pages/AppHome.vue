@@ -8,9 +8,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">HOME</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">SEND MESSAGE</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="#">ABOUT</a>
                     </li>
@@ -35,7 +35,7 @@
                     <!-- Card 1 -->
                     <div class="col-md-4">
                         <div class="card h-100">
-                            <img src="https://via.placeholder.com/400x250" alt="Cognitive 3D" class="card-img-top" />
+                            <img src="/img/2.png" alt="Cognitive 3D" class="card-img-top" />
                             <div class="card-body">
                                 <h5 class="card-title">Why Cognitive 3D</h5>
                                 <p class="card-text">
@@ -51,7 +51,7 @@
                     <!-- Card 2 -->
                     <div class="col-md-4">
                         <div class="card h-100">
-                            <img src="https://via.placeholder.com/400x250" alt="Seamless Integration"
+                            <img src="/img/2.png" alt="Seamless Integration"
                                 class="card-img-top" />
                             <div class="card-body">
                                 <h5 class="card-title">Seamless Integration</h5>
@@ -68,7 +68,7 @@
                     <!-- Card 3 -->
                     <div class="col-md-4">
                         <div class="card h-100">
-                            <img src="https://via.placeholder.com/400x250" alt="Transform Insights"
+                            <img src="/img/2.png" alt="Transform Insights"
                                 class="card-img-top" />
                             <div class="card-body">
                                 <h5 class="card-title">Transform Insights into Action</h5>
