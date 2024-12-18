@@ -76,20 +76,38 @@ export default {
                 this.eyeIconClass = 'fas fa-eye';
             }
         },
-        submitForm() {
-            // Send the form data to your backend (assuming you use axios or fetch for API calls)
+        
+        async submitForm() {
             const data = {
                 email: this.email,
                 password: this.password,
                 remember_me: this.rememberMe,
             };
 
-            // Mock-up form submission (replace with actual API call)
-            console.log('Form submitted with data:', data);
+            this.messages = [{ type: 'alert-info', text: 'Submitting your login credentials...' }];
 
-            // Handle the success or failure response
-            // Example: this.messages.push({ text: 'Login Successful', type: 'alert-success' });
-            // Example: this.messages.push({ text: 'Invalid credentials', type: 'alert-danger' });
+            // const baseURL = import.meta.env.VITE_BASE_URL;  
+
+            // try {
+            //     const response = await axios.post(`${baseURL}/login/`, data, {
+            //         headers: {
+            //             'Content-Type': 'application/json',  
+            //         }
+            //     });
+
+            //     // Check for successful login
+            //     if (response.data.success) {
+            //         this.messages = [{ type: 'alert-success', text: 'Login successful!' }];
+            //         // localStorage.setItem('authToken', response.data.token);
+            //         // this.$router.push('/dashboard');
+            //     } else {
+            //         this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
+            //     }
+
+            // } catch (error) {
+            //     console.error('Error submitting login:', error);
+            //     this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.' }];
+            // }
         },
     },
 };
