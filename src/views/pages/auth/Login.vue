@@ -55,6 +55,10 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+
 export default {
     data() {
         return {
@@ -86,29 +90,51 @@ export default {
 
             this.messages = [{ type: 'alert-info', text: 'Submitting your login credentials...' }];
 
-            // const baseURL = import.meta.env.VITE_BASE_URL;  
+            const baseURL = import.meta.env.VITE_BASE_URL;  
 
-            // try {
-            //     const response = await axios.post(`${baseURL}/login/`, data, {
-            //         headers: {
-            //             'Content-Type': 'application/json',  
-            //         }
-            //     });
+            try {
+                const response = await axios.post(`${baseURL}/login/`, data, {
+                    headers: {
+                        'Content-Type': 'application/json', 
+                    }
+                });
 
-            //     // Check for successful login
-            //     if (response.data.success) {
-            //         this.messages = [{ type: 'alert-success', text: 'Login successful!' }];
-            //         // localStorage.setItem('authToken', response.data.token);
-            //         // this.$router.push('/dashboard');
-            //     } else {
-            //         this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
-            //     }
+                if (response.data.access && response.data.refresh) {
 
-            // } catch (error) {
-            //     console.error('Error submitting login:', error);
-            //     this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.' }];
-            // }
+                    localStorage.setItem('accessToken', response.data.access);
+                    localStorage.setItem('refreshToken', response.data.refresh);
+
+                    localStorage.setItem('user', JSON.stringify(response.data.user));
+
+                    // Store tokens in cookies with appropriate flags for security
+                    // Cookies.set('accessToken', response.data.access, {
+                    //     expires: 1,  // The cookie will expire in 1 day (adjust as needed)
+                    //     secure: true, // Ensure cookies are sent over HTTPS
+                    //     sameSite: 'Strict', // Prevent CSRF attacks
+                    // });
+
+                    // Cookies.set('refreshToken', response.data.refresh, {
+                    //     expires: 7,  // Refresh token can have a longer expiration time
+                    //     secure: true,
+                    //     sameSite: 'Strict',
+                    // });
+
+                    // // Store user data in cookies (optional)
+                    // Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
+
+                    this.messages = [{ type: 'alert-success', text: 'Login successful!' }];
+
+                    // this.$router.push('/dashboard');  
+                } else {
+                    this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
+                }
+            } catch (error) {
+                console.error('Error submitting login:', error);
+
+                this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.' }];
+            }
         },
+
     },
 };
 </script>

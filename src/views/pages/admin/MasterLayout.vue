@@ -21,9 +21,10 @@
 </template>
 
 <script>
-import Sidebar from "../../../layouts/AdminSidebar.vue";
-import Navbar from "../../../layouts/AdminNavbar.vue";
-import Footer from "../../../layouts/AdminFooter.vue";
+// import Sidebar from "../../../layouts/AdminSidebar.vue";
+import Sidebar from "@/layouts/AdminSidebar.vue";
+import Navbar from "@/layouts/AdminNavbar.vue";
+import Footer from "@/layouts/AdminFooter.vue";
 
 export default {
     components: {
