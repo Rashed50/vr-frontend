@@ -17,6 +17,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">CONTACT US</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/mqtt">MQTT Broker</a>
+                    </li>
+
                     <li class="nav-item" v-if="authenticated">
                         <a class="nav-link" href="#">DASHBOARD</a>
                     </li>

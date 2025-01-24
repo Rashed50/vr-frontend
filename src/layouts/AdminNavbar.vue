@@ -19,8 +19,7 @@
                 <button class="topbar-toggler more">
                     <i class="gg-more-vertical-alt"></i>
                 </button>
-            </div>
-            <!-- End Logo Header -->
+            </div> 
         </div>
         <!-- End Header -->
 
@@ -44,12 +43,12 @@
                     <li class="nav-item topbar-user dropdown hidden-caret">
                         <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                             <div class="avatar-sm">
-                                <img src="/img/profile.jpg" alt="..."
-                                    class="avatar-img rounded-circle" />
+                                <!-- <img src="/img/profile.jpg" alt="..."
+                                    class="avatar-img rounded-circle" /> -->
                             </div>
                             <span class="profile-username">
-                                <span class="op-7">Hi,</span>
-                                <span class="fw-bold">Md. Rakib Hassan</span>
+                                <!-- <span class="op-7">Hi,</span>
+                                <span class="fw-bold">Md. Rakib Hassan</span> -->
                             </span>
                         </a>
                         <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -61,22 +60,22 @@
                                                 class="avatar-img rounded" />
                                         </div>
                                         <div class="u-text">
-                                            <h4>Md. Rakib Hassan</h4>
+                                            <!-- <h4>Md. Rakib Hassan</h4>
                                             <p class="text-muted">rakib1515hassan@diu.edu.bd</p>
                                             <a href="/" class="btn btn-xs btn-secondary btn-sm">View
-                                                Profile</a>
+                                                Profile</a> -->
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="dropdown-divider"></div>
+                                    <!-- <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">My Profile</a>
                                     <a class="dropdown-item" href="#">My Balance</a>
                                     <a class="dropdown-item" href="#">Inbox</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Account Setting</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/">Logout</a>
+                                    <a class="dropdown-item" href="/">Logout</a> -->
                                 </li>
                             </div>
                         </ul>

@@ -5,9 +5,13 @@ import VR3DList from "@/views/pages/admin/vr3d/list.vue";
 import Home from "@/views/pages/AppHome.vue"
 import Login from "@/views/pages/auth/Login.vue"
 import Registration from "@/views/pages/auth/Registration.vue"
+// mqtt connection
+import MqttCommunication from "@/views/pages/mqtt/MqttCommunication.vue"
+
+
 
 const routes = [
-    {
+        {
             path: "/admin",
             component: MasterLayout,
             // redirect: "/admin/home",
@@ -22,6 +26,7 @@ const routes = [
                     name: "vr_list",
                     component: VR3DList,
                 },
+                
             ], 
             
         },
@@ -29,20 +34,23 @@ const routes = [
             path: "/",
             name: "home",
             component: Home,
-            // redirect: "/admin/home",
-        },
+         },        
         {
             path: "/login",
             name: "login",
             component: Login,
-            // redirect: "/admin/home",
-        },
+         },
         {
             path: "/registration",
             name: "registration",
             component: Registration,
-            // redirect: "/admin/home",
-        },
+         },
+         {
+            path:"/mqtt",
+            name:"mqtt",
+            component:MqttCommunication
+         },
+       
 ];
 
 const router = createRouter({

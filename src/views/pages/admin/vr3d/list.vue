@@ -35,7 +35,7 @@
                                     <!-- Iterate over vrData and display each item in a row -->
                                     <tr v-for="(item, index) in vrData" :key="index">
                                         <td>{{ item.topic }}</td>
-                                        <td>{{ item.sessionID }}</td>
+                                        <td>{{ item.sessionId }}</td>
                                         <td>{{ item.frameNumber }}</td>
                                         <td>{{ item.timestamp }}</td>
                                         <td>{{ item.sensorData }}</td>

@@ -13,9 +13,12 @@
 
                 <!-- Login Form -->
                 <form @submit.prevent="submitForm">
+
+
+                    
                     <div class="mb-3">
-                        <label class="form-label">Email address</label>
-                        <input v-model="email" type="email" class="form-control ps-2" placeholder="Write your email..."
+                        <label class="form-label">User Name</label>
+                        <input v-model="email" type="text" class="form-control ps-2" placeholder="Write your user name"
                             required />
                     </div>
 
@@ -58,7 +61,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-
 export default {
     data() {
         return {
@@ -83,29 +85,35 @@ export default {
         
         async submitForm() {
             const data = {
-                email: this.email,
+                username: this.email,
                 password: this.password,
                 remember_me: this.rememberMe,
             };
+           // VITE_BASE_URL= 'http://127.0.0.1:8001'
+            // VITE_BASE_URL2 = 'https://catfact.ninja/fact'
+           
 
             this.messages = [{ type: 'alert-info', text: 'Submitting your login credentials...' }];
+            const baseURL =   import.meta.env.VITE_BASE_URL;   // 'http://127.0.0.1:8081'; //
 
-            const baseURL = import.meta.env.VITE_BASE_URL;  
+            var form_data = new FormData();
+            form_data.append('username',this.email);
+            form_data.append('password',this.password);
 
             try {
-                const response = await axios.post(`${baseURL}/login/`, data, {
-                    headers: {
-                        'Content-Type': 'application/json', 
+                const response = await axios.post(`${baseURL}/auth/token`, form_data, {
+                    headers: { 
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Access-Control-Allow-Origin": "*"
                     }
                 });
 
-                if (response.data.access && response.data.refresh) {
+                 
+                if (response.data.access_token) {
 
-                    localStorage.setItem('accessToken', response.data.access);
-                    localStorage.setItem('refreshToken', response.data.refresh);
-
-                    localStorage.setItem('user', JSON.stringify(response.data.user));
-
+                    localStorage.setItem('access_token', response.data.access_token);
+                  //  localStorage.setItem('refreshToken', response.data.refresh);
+                   // localStorage.setItem('user', JSON.stringify(response.data.user));
                     // Store tokens in cookies with appropriate flags for security
                     // Cookies.set('accessToken', response.data.access, {
                     //     expires: 1,  // The cookie will expire in 1 day (adjust as needed)
@@ -121,18 +129,34 @@ export default {
 
                     // // Store user data in cookies (optional)
                     // Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
-
                     this.messages = [{ type: 'alert-success', text: 'Login successful!' }];
-
-                    // this.$router.push('/dashboard');  
+                    this.$router.push('/admin'); 
+                    //this.$router.push('mqtt_communication') 
                 } else {
                     this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
                 }
             } catch (error) {
-                console.error('Error submitting login:', error);
-
-                this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.' }];
+               // console.error('Error submitting login:', error);
+                console.log(error);
+                this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
             }
+
+
+          
+            // var form_data = new FormData()
+            // form_data.append('username','admin')
+            // form_data.append('password','admin')
+            // axios.post("http://127.0.0.1:8081/auth/token",
+            // form_data, {
+            //     headers: { 
+            //         "Content-Type": "application/x-www-form-urlencoded",
+            //         "Access-Control-Allow-Origin": "*"
+            //     }
+            //     }).then(function(response) {
+            //         console.log(response);
+            //        // this.messages = [{ type: 'alert-danger', text: 'server response' }];
+                    
+            //     });
         },
 
     },
