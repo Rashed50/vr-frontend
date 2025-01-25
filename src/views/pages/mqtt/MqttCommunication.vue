@@ -34,7 +34,7 @@
                 </form>
 
                 <div class="row">
-                    <form @submit.prevent="submitForm" v-if="authenticated" id="message_form">
+                    <form @submit.prevent="sendMessage" v-if="authenticated" id="message_form">
                         <div class="row">
                             <label class="form-label col-md-3">Topic</label>
                             <input type="text" v-model="topic" class="form-control ps-1 col-md-9"
@@ -103,9 +103,7 @@ export default {
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Access-Control-Allow-Origin": "*"
                     }
-                });
-
-                 
+                });                 
                 if (response.data.access_token) {
 
                   //  sessionStorage.setItem('access_token', response.data.access_token);
@@ -123,14 +121,10 @@ export default {
                 } else {
                     this.messages = [{ type: 'alert-danger', text: 'Invalid Credentials!' }];
                 }
-            } catch (error) {
-                
+            } catch (error) {                
                 console.log(error);
                 this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
-            }
-
-
-          
+            }          
             // var form_data = new FormData()
             // form_data.append('username','admin')
             // form_data.append('password','admin')
@@ -146,6 +140,33 @@ export default {
                     
             //     });
         },
+        async sendMessage(){
+            try{
+                const form_data = {
+                    'topic':this.topic,
+                    'payload' : this.payload
+                }                
+                const baseURL =   import.meta.env.VITE_BASE_URL; 
+                debugger;                
+                let json_data = JSON.parse(this.payload);
+                json_data.topic = this.topic
+                console.log(json_data); 
+                const response =  await axios.post(`${baseURL}/auth/users/send-message`,json_data,{
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                });
+                if(response.data){
+                    console.log(response.data)
+                }
+
+            }catch(error){
+                    console.log(error)
+            }
+
+        }
+
     }
     
 
