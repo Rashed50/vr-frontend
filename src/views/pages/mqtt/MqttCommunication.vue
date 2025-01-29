@@ -101,7 +101,7 @@ export default {
                 const response = await axios.post(`${baseURL}/auth/token`, form_data, {
                     headers: { 
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "Access-Control-Allow-Origin": "*"
+                        "Access-Control-Allow-Origin": "*" // allow cross origin 
                     }
                 });                 
                 if (response.data.access_token) {
@@ -159,10 +159,12 @@ export default {
                 });
                 if(response.data){
                     console.log(response.data)
+                    this.messages = [{ type: 'alert-success', text: 'server response' }];
                 }
 
             }catch(error){
                     console.log(error)
+                    this.messages = [{ type: 'alert-danger', text: 'server response' }];
             }
 
         }
