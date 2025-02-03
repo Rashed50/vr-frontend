@@ -24,6 +24,7 @@
                             <table class="table table-bordered table-head-bg-primary table-striped">
                                 <thead>
                                     <tr>
+                                        <th>S.N</th>
                                         <th>Topic</th>
                                         <th>Session ID</th>
                                         <th>Frame Number</th>
@@ -34,6 +35,7 @@
                                 <tbody>
                                     <!-- Iterate over vrData and display each item in a row -->
                                     <tr v-for="(item, index) in vrData" :key="index">
+                                        <td>{{ index+1 }}</td>
                                         <td>{{ item.topic }}</td>
                                         <td>{{ item.sessionId }}</td>
                                         <td>{{ item.frameNumber }}</td>
@@ -80,10 +82,19 @@ export default {
             const baseURL = import.meta.env.VITE_BASE_URL;
 
             try {
-                const response = await axios.get(`${baseURL}/get-vr-data`);
+              //  const response = await axios.get(`${baseURL}/vrsensor/records`);
+
+                const response =  await axios.get(`${baseURL}/vrsensor/records`,{
+                    headers: {                         
+                        "Authorization":"bearer "+localStorage.getItem('access_token')
+                    }
+                });
+
+                
 
                 if (response && response.data) {
-                    this.vrData = response.data;  
+                    this.vrData = response.data.content;  
+                    
                 }
             } catch (error) {
                 console.error('Error fetching VR data:', error);

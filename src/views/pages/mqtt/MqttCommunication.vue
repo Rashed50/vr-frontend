@@ -69,8 +69,9 @@ export default {
             eyeIconClass: 'fas fa-eye',
             messages: [],
             payload:"",
-            topic:"",
+            topic:"vrsensors",
             authenticated: document.cookie ? true:false // sessionStorage.getItem('access_token') ? true:false,
+          //  authenticated: sessionStorage.getItem('access_token') ? true:false,
         };
     },
     methods:{
@@ -100,8 +101,8 @@ export default {
             try {
                 const response = await axios.post(`${baseURL}/auth/token`, form_data, {
                     headers: { 
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Access-Control-Allow-Origin": "*" // allow cross origin 
+                       // "Content-Type": "application/x-www-form-urlencoded",
+                        //"Access-Control-Allow-Origin": "*" // allow cross origin 
                     }
                 });                 
                 if (response.data.access_token) {
@@ -109,11 +110,12 @@ export default {
                   //  sessionStorage.setItem('access_token', response.data.access_token);
 
                     localStorage.setItem('access_token', response.data.access_token);  
-                    localStorage.setItem('refreshToken', response.data.refresh);
-                    //localStorage.setItem('user', JSON.stringify(response.data.user));
+                  //  localStorage.setItem('refreshToken', response.data.refresh);
+                   
+                  //localStorage.setItem('user', JSON.stringify(response.data.user));
                   //  Store tokens in cookies with appropriate flags for security                 
                     
-                    var expires = (new Date(Date.now()+ 10000)).toUTCString(); // time in milisecond
+                    var expires = (new Date(Date.now()+ 1000*10)).toUTCString(); // time in milisecond
                     document.cookie = "cookieName=cookieValue; expires=" + expires + ";path=/;"
  
                     this.messages = [{ type: 'alert-success', text: 'Susscessfully Authenticated' }];                  
@@ -125,20 +127,7 @@ export default {
                 console.log(error);
                 this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
             }          
-            // var form_data = new FormData()
-            // form_data.append('username','admin')
-            // form_data.append('password','admin')
-            // axios.post("http://127.0.0.1:8081/auth/token",
-            // form_data, {
-            //     headers: { 
-            //         "Content-Type": "application/x-www-form-urlencoded",
-            //         "Access-Control-Allow-Origin": "*"
-            //     }
-            //     }).then(function(response) {
-            //         console.log(response);
-            //        // this.messages = [{ type: 'alert-danger', text: 'server response' }];
-                    
-            //     });
+            
         },
         async sendMessage(){
             try{
@@ -147,14 +136,23 @@ export default {
                     'payload' : this.payload
                 }                
                 const baseURL =   import.meta.env.VITE_BASE_URL; 
-                debugger;                
+//                 {
+//   "msg": " today message from mqttx web",
+//   "sessionID": "43859034805843",
+//   "frameNumber": 6549671763,
+//   "timestamp": 1734351949,
+//   "sensorData":{}
+// }
+
+                            
                 let json_data = JSON.parse(this.payload);
                 json_data.topic = this.topic
                 console.log(json_data); 
                 const response =  await axios.post(`${baseURL}/auth/users/send-message`,json_data,{
                     headers: { 
-                        "Content-Type": "application/json",
-                        "Access-Control-Allow-Origin": "*"
+                       // "Content-Type": "application/json",
+                       // "Access-Control-Allow-Origin": "*",
+                        "Authorization":"bearer "+localStorage.getItem('access_token')
                     }
                 });
                 if(response.data){

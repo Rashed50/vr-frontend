@@ -89,10 +89,7 @@ export default {
                 password: this.password,
                 remember_me: this.rememberMe,
             };
-           // VITE_BASE_URL= 'http://127.0.0.1:8001'
-            // VITE_BASE_URL2 = 'https://catfact.ninja/fact'
-           
-
+                   
             this.messages = [{ type: 'alert-info', text: 'Submitting your login credentials...' }];
             const baseURL =   import.meta.env.VITE_BASE_URL;   // 'http://127.0.0.1:8081'; //
 
@@ -112,31 +109,29 @@ export default {
                 if (response.data.access_token) {
 
                     localStorage.setItem('access_token', response.data.access_token);
-                  //  localStorage.setItem('refreshToken', response.data.refresh);
-                   // localStorage.setItem('user', JSON.stringify(response.data.user));
-                    // Store tokens in cookies with appropriate flags for security
-                    // Cookies.set('accessToken', response.data.access, {
-                    //     expires: 1,  // The cookie will expire in 1 day (adjust as needed)
-                    //     secure: true, // Ensure cookies are sent over HTTPS
-                    //     sameSite: 'Strict', // Prevent CSRF attacks
-                    // });
-
-                    // Cookies.set('refreshToken', response.data.refresh, {
+                     var expires = (new Date(Date.now()+ 1000*100)).toUTCString(); // time in milisecond
+                    document.cookie = "cookieName=thecookie;Secure=true; expires=" + expires + ";SameSite=Strict;path=/;"
+                   //"+response.data.access_token+"
+                    
+                   // Cookies.set('refreshToken', response.data.access_token, {
                     //     expires: 7,  // Refresh token can have a longer expiration time
                     //     secure: true,
-                    //     sameSite: 'Strict',
+                    //     sameSite: 'Strict', Secure:true, HttpOnly
                     // });
+
+                   
 
                     // // Store user data in cookies (optional)
                     // Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
                     this.messages = [{ type: 'alert-success', text: 'Login successful!' }];
-                    this.$router.push('/admin'); 
+                    this.$router.push('admin'); 
+                    console.log('Login success');
                     //this.$router.push('mqtt_communication') 
                 } else {
                     this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
                 }
             } catch (error) {
-               // console.error('Error submitting login:', error);
+                debugger;
                 console.log(error);
                 this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
             }

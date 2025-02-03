@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, onBeforeRouteUpdate } from "vue-router";
 import MasterLayout from "@/views/pages/admin/MasterLayout.vue";
 import Dashboard from "@/views/pages/admin/Dashboard.vue";
 import VR3DList from "@/views/pages/admin/vr3d/list.vue";
@@ -13,13 +13,15 @@ import MqttCommunication from "@/views/pages/mqtt/MqttCommunication.vue"
 const routes = [
         {
             path: "/admin",
-            component: MasterLayout,
+            name:"admin",
+            component: MasterLayout,             
             // redirect: "/admin/home",
             children: [
                 {
                     path: "",
                     name: "admin_home",
                     component: Dashboard,
+                    
                 },
                 {
                     path: "admin_vr_model_list",
@@ -34,6 +36,7 @@ const routes = [
             path: "/",
             name: "home",
             component: Home,
+            
          },        
         {
             path: "/login",
@@ -48,14 +51,33 @@ const routes = [
          {
             path:"/mqtt",
             name:"mqtt",
-            component:MqttCommunication
+            component:MqttCommunication,
+            
+            
          },
        
 ];
+
+
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach(async (to, from) => {
+
+        var authenticated = document.cookie ? true:false ;
+        console.log("from url: "+from+", to url: "+to.name)
+        if(to.name == "login"){
+            console.log("Login UI")
+        }
+       else if(!authenticated ){
+            console.log('Authentication failed  '); 
+            return {name:'login'}           
+        }
+        console.log("login -"+localStorage.getItem('access_token'));
+     
+  })
 
 export default router;
