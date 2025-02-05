@@ -98,7 +98,7 @@ export default {
             form_data.append('password',this.password);
 
             try {
-                const response = await axios.post(`${baseURL}/auth/token`, form_data, {
+                const response = await axios.post(`${baseURL}/auth/v2/token`, form_data, {
                     headers: { 
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Access-Control-Allow-Origin": "*"
@@ -109,17 +109,9 @@ export default {
                 if (response.data.access_token) {
 
                     localStorage.setItem('access_token', response.data.access_token);
-                     var expires = (new Date(Date.now()+ 1000*100)).toUTCString(); // time in milisecond
+                    var expires = (new Date(Date.now()+ 1000*60)).toUTCString(); // time in milisecond
                     document.cookie = "cookieName=thecookie;Secure=true; expires=" + expires + ";SameSite=Strict;path=/;"
                    //"+response.data.access_token+"
-                    
-                   // Cookies.set('refreshToken', response.data.access_token, {
-                    //     expires: 7,  // Refresh token can have a longer expiration time
-                    //     secure: true,
-                    //     sameSite: 'Strict', Secure:true, HttpOnly
-                    // });
-
-                   
 
                     // // Store user data in cookies (optional)
                     // Cookies.set('user', JSON.stringify(response.data.user), { expires: 1 });
@@ -131,9 +123,9 @@ export default {
                     this.messages = [{ type: 'alert-danger', text: 'Invalid credentials!' }];
                 }
             } catch (error) {
-                debugger;
+              
                 console.log(error);
-                this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
+                this.messages = [{ type: 'alert-danger', text: 'Login Failed. Please try again.'    }];
             }
 
 

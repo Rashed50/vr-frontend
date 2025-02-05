@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center align-items-center full-height">
         <div class="card" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;">
             <div class="card-body p-4 p-md-5">
-                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Connection with MQTT Broker</h3>
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">JWT Authentication</h3>
 
                 <!-- Error and success messages -->
                 <div v-if="messages.length">
@@ -30,8 +30,18 @@
                         </div> 
                         
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block mb-4" style="width: 100%;">  Connect  </button>                                     
+
+                    <div class="row">
+                        <div v-if="!authenticated" class="col md-5" style="float: left;">
+                                <button type="submit" class="btn btn-primary btn-block mb-4" style="width: 100%;">  Connect </button>                                     
+                        </div>
+                        <div v-if="authenticated" class="col md-5">  <br>
+                            <input type="button" id="logoutbtn" @click="logout()"  value="Logout" title="Loginnn"/>  <br><br>
+                        </div> 
+                                                   
+                    </div>                      
                 </form>
+                
 
                 <div class="row">
                     <form @submit.prevent="sendMessage" v-if="authenticated" id="message_form">
@@ -68,13 +78,33 @@ export default {
             passwordFieldType: 'password',
             eyeIconClass: 'fas fa-eye',
             messages: [],
-            payload:"",
+            payload: this.getDemoMessagePayload(),
             topic:"vrsensors",
-            authenticated: document.cookie ? true:false // sessionStorage.getItem('access_token') ? true:false,
-          //  authenticated: sessionStorage.getItem('access_token') ? true:false,
+            authenticated: this.checkAuthenticationData(),
+
         };
     },
     methods:{
+
+        getDemoMessagePayload(){
+            const defaultMsg = {msg: "demo message ", sessionID:"9653216549879", frameNumber: "7418596" , timestamp:"34954564645", sensorData:{}};
+            return JSON.stringify(defaultMsg);
+        },
+        checkAuthenticationData(){
+            var cok = document.cookie ? true:false;  // sessionStorage.getItem('access_token') ? true:false,
+            if(cok){
+                this.messages = [{ type: 'alert-success', text: 'Connection alive' }]; 
+            }
+            return cok;
+        },
+        logout(){                               
+                    localStorage.setItem('access_token', null);                           
+                    var expires = (new Date(Date.now()+ 100)).toUTCString(); // time in milisecond
+                    document.cookie = "cookieName=cookieValue; expires=" + expires + ";path=/;"
+                    this.messages = []  
+                    this.authenticated = false;                 
+
+        },
         togglePassword() {
             if (this.passwordFieldType === 'password') {
                 this.passwordFieldType = 'text';
@@ -99,10 +129,10 @@ export default {
             form_data.append('password',this.password);
 
             try {
-                const response = await axios.post(`${baseURL}/auth/token`, form_data, {
+                const response = await axios.post(`${baseURL}/auth/v2/token`, form_data, {
                     headers: { 
-                       // "Content-Type": "application/x-www-form-urlencoded",
-                        //"Access-Control-Allow-Origin": "*" // allow cross origin 
+                       "Content-Type": "application/x-www-form-urlencoded",
+                        "Access-Control-Allow-Origin": "*" // allow cross origin 
                     }
                 });                 
                 if (response.data.access_token) {
@@ -115,7 +145,7 @@ export default {
                   //localStorage.setItem('user', JSON.stringify(response.data.user));
                   //  Store tokens in cookies with appropriate flags for security                 
                     
-                    var expires = (new Date(Date.now()+ 1000*10)).toUTCString(); // time in milisecond
+                    var expires = (new Date(Date.now()+ 1000*60)).toUTCString(); // time in milisecond
                     document.cookie = "cookieName=cookieValue; expires=" + expires + ";path=/;"
  
                     this.messages = [{ type: 'alert-success', text: 'Susscessfully Authenticated' }];                  
@@ -123,46 +153,60 @@ export default {
                 } else {
                     this.messages = [{ type: 'alert-danger', text: 'Invalid Credentials!' }];
                 }
-            } catch (error) {                
+            } catch (error) {   
+                       
                 console.log(error);
                 this.messages = [{ type: 'alert-danger', text: 'An error occurred during login. Please try again.'    }];
             }          
             
         },
         async sendMessage(){
-            try{
-                const form_data = {
-                    'topic':this.topic,
-                    'payload' : this.payload
-                }                
+            try{                
+                  
+                //  if(this.checkAuthenticationData() == false){                   
+                //     // this.$router.push('login'); // redirect to login page 
+                //     this.authenticated = false;
+                //     this.messages = [];
+                //     return;
+                //  }
                 const baseURL =   import.meta.env.VITE_BASE_URL; 
-//                 {
-//   "msg": " today message from mqttx web",
-//   "sessionID": "43859034805843",
-//   "frameNumber": 6549671763,
-//   "timestamp": 1734351949,
-//   "sensorData":{}
-// }
-
-                            
+                    //                 {
+                    //   "msg": " today message from mqttx web",
+                    //   "sessionID": "43859034805843",
+                    //   "frameNumber": "798456132",
+                    //   "timestamp": "4950596054",
+                    //   "sensorData":{}
+                    // }
+                         
                 let json_data = JSON.parse(this.payload);
-                json_data.topic = this.topic
-                console.log(json_data); 
+                json_data.topic = this.topic              
                 const response =  await axios.post(`${baseURL}/auth/users/send-message`,json_data,{
                     headers: { 
-                       // "Content-Type": "application/json",
-                       // "Access-Control-Allow-Origin": "*",
-                        "Authorization":"bearer "+localStorage.getItem('access_token')
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        "Authorization":"Bearer "+localStorage.getItem('access_token')
                     }
                 });
-                if(response.data){
+
+                
+                debugger;
+                if(response.status == 200){
                     console.log(response.data)
-                    this.messages = [{ type: 'alert-success', text: 'server response' }];
+                    this.messages = [{ type: 'alert-success', text: 'Message Sent!' }];
+                }
+                else if(response.status == 401)   
+                    this.logout();
+                else {
+                    console.log(response)
+                    this.messages = [{ type: 'alert-danger', text: 'Message Failed' }];
                 }
 
             }catch(error){
-                    console.log(error)
-                    this.messages = [{ type: 'alert-danger', text: 'server response' }];
+               
+                console.log(error)
+                this.messages = [{ type: 'alert-danger', text: 'Operation Exception' }];
+                if(error.status == 401)   
+                this.logout(); 
             }
 
         }

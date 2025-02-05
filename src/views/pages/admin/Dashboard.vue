@@ -1,3 +1,3 @@
 <template>
-    <h1>This Is Dashboard Page</h1>
+    <h1> &nbsp;&nbsp;&nbsp; Admin Dashboard</h1>
 </template>

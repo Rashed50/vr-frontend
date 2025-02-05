@@ -69,10 +69,11 @@ router.beforeEach(async (to, from) => {
 
         var authenticated = document.cookie ? true:false ;
         console.log("from url: "+from+", to url: "+to.name)
-        if(to.name == "login"){
-            console.log("Login UI")
+       
+        if(to.name == "home" || to.name == "registration" || to.name == "login" || to.name == "mqtt"){
+            console.log("public  UI")
         }
-       else if(!authenticated ){
+        else if(!authenticated ){
             console.log('Authentication failed  '); 
             return {name:'login'}           
         }
